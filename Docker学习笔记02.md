@@ -12,3 +12,47 @@ ____
 1. 使用docker exec进入容器麻烦
 2. 容器若出问题，内部已修改的信息有丢失风险
 
+### 解决方法：
+
+使用容器挂载
+
+1.目录挂载
+
+```
+docker run -d -p 80:80 -v /app/nghtml:/usr/share/nginx/html --name mynginx nginx:1.26.0
+```
+
+其中
+
+> -v 是将外部文件与内部文件相关联，此处将外部服务器上的 /app/nghtml 与 容器内部的 /usr/share/nginx/html 相关联
+> 此时容器以外部文件夹内容为准
+
+使用
+```
+cd /app/nghtml
+touch index.html
+echo "<h1>hello world</h1>" > index.html
+```
+
+即可编写一个简单的新页面
+
+> 如果删除容器，内部 /app/nghtml 仍然会存在，可供下次使用
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
