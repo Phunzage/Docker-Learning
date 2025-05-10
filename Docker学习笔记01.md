@@ -4,7 +4,7 @@
 使用按需付费，公网使用按流量计费，可拉满带宽
 新建安全组开放443、22、80
 使用华为云自带远程连接 CloudShell 
-或者在本地 windows terminal 使用 ssh root@公网ip，输入密码后连接
+或者在本地终端使用 ssh root@公网ip，输入密码后连接
 
 ---
 
@@ -98,6 +98,7 @@ docker run -d --name mynginx -p 88:80 nginx
 ```
 docker ps	//查看进行的容器
 docker ps -a	//查看所有容器，包括已经停止的
+docker ps -aq    //查看当前所有容器的id
 ```
 
 - 停止
@@ -207,3 +208,11 @@ docker run -d --name hisnginx -p 80:80 mynginx:v1.0
 ```
 
 即可查看页面
+
+### 3.5 分享社区
+
+将文件推送到社区，别人使用docker pull即可下载自己的镜像
+
+由于某些原因，不记录此步骤
+
+
