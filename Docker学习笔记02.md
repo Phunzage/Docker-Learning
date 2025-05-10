@@ -16,7 +16,7 @@ ____
 
 使用容器挂载
 
-1.目录挂载
+1. 目录挂载
 
 ```
 docker run -d -p 80:80 -v /app/nghtml:/usr/share/nginx/html --name mynginx nginx:1.26.0
@@ -37,6 +37,34 @@ echo "<h1>hello world</h1>" > index.html
 即可编写一个简单的新页面
 
 > 如果删除容器，内部 /app/nghtml 仍然会存在，可供下次使用
+
+
+2. 卷映射
+
+```
+docker run -d -p 80:80 -v /app/nghtml:/usr/share/nginx/html -v ngconf:/etc/nginx --name mynginx nginx:1.26.0
+```
+
+其中
+
+> -v ngconf:/etc/nginx 是将nginx的配置文件夹挂载给 ngconf 这个卷，前后不要加 / ，此时 ngconf 内部会有（复制过来）配置文件，
+> 此时文件内容要以容器内配置文件为准 
+
+默认存储位置在 /var/lib/docker/volumes/文件名（ngconf），可以使用
+
+```
+查看挂载的卷
+docker volume ls
+新创建卷
+docker volume create newconf01
+查看详情
+docker volume inspect ngconf    //可查看卷所在容器内位置以及创建时间等属性
+```
+
+> 如果删除容器，卷也会保留以供下次使用
+
+
+
 
 
 
