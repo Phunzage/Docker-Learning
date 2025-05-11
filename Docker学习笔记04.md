@@ -49,7 +49,7 @@ services:
 		ports:
 			- "3306:3306"
 		environment:
-			- MYSQL_ROOT_PASSWORD=123456
+			- MYSQL_ROOT_PASSWORD=123456    //可以使用键值对的方式描述
 			- MYSQL_DATABASE=wordpress
 		volumes:
 			- mysql-data:/var/lib/mysql
@@ -60,7 +60,7 @@ services:
 	wordpress:
 		image: wordpress
 		ports:
-			- "8080:80"
+			- "80:80"
 		environment:
 			- WORDPRESS_DB_HOST=mysql
 			- WORDPRESS_DB_USER=root
@@ -68,11 +68,11 @@ services:
 			- WORDPRESS_DB_NAME=wordpress
 		volumes:
 			- "wordpress:/var/www/html"
-		restart: always
+		restart: always    //总是随服务器的启动而启动
 		networks:
 			- blog
 		depends_on:
-			- mysql
+			- mysql    //依赖 mysql 服务
 
 volumes:
 	mysql-data:
