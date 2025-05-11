@@ -63,7 +63,9 @@ docker run -d -p 6379:6379 \
 bitnami/redis
 ```
 
-> 其中 -e 是环境变量，此处指明redis是主机，密码为123456
+> 其中 -e 是环境变量，此处指明 redis 是主机，密码为123456
+> 加入自建网络， 起别名为 redis01
+> 使用 bitnami 的 redis 镜像
 
 ```
 从机配置
@@ -77,6 +79,11 @@ docker run -d -p 6380:6379 \
 --network mynet --name redis02 \
 bitnami/redis
 ```
+
+> 此处指明 redis 是从机，它的主机是 redis01，主机端口是 6379 ，
+> 主机密码是123456 ，redis02 自身密码是 123456 
+> 加入自建网络，起别名为 redis02
+> 使用 bitnami 的 redis 镜像
 
 ___
 
