@@ -85,6 +85,8 @@ bitnami/redis
 > 加入自建网络，起别名为 redis02
 > 使用 bitnami 的 redis 镜像
 
+在本地终端，可以使用 `redis-cli -h ip -p port` 连接远程redis（需要先配置 redis.conf ，允许远程连接），通过修改主机文件，从机可同步
+
 ___
 
 ### MySQL
@@ -92,3 +94,20 @@ ___
  > 一个图例
 
 ![[Pasted image 20250510213034.png]]
+
+关于容器的一些参数信息（如数据、配置目录），可以通过 `docker inspect 容器名` 或者去 docker hub（镜像站）来获取
+
+启动一个 mysql 容器
+
+```
+docker run -d -p 3306:3306 \
+-v /app/myconf:/etc/mysql/conf.d \
+-v /app/mydata:/var/lib/mysql \
+-e MYSQL_ROOT_PASSWORD=123456 \
+--name sql01 \
+mysql:8.0.42
+```
+
+> 挂载 mysql 配置文件和数据文件
+
+在本地终端可以使用 `mysql -hip -Pport -u用户id -p密码`即可远程连接 MySQL 数据库
