@@ -36,6 +36,65 @@ wordpress:latest
 
 ### 解决问题
 
-使用 Docker compose 
+使用 Docker compose 创建一个 yaml 文件，把配置信息写到里面
+
+```
+compose.yaml
+
+name: myblog
+services:
+	mysql:
+		container_name: mysql
+		image: mysql:8.0.42
+		ports:
+			- "3306:3306"
+		environment:
+			- MYSQL_ROOT_PASSWORD=123456
+			- MYSQL_DATABASE=wordpress
+		volumes:
+			- mysql-data:/var/lib/mysql
+			- /app/myconf:/etc/mysql/conf.d
+		restart: always
+		networks:
+			- blog
+	wordpress:
+		image: wordpress
+		ports:
+			- "8080:80"
+		environment:
+			- WORDPRESS_DB_HOST=mysql
+			- WORDPRESS_DB_USER=root
+			- WORDPRESS_DB_PASSWORD=123456
+			- WORDPRESS_DB_NAME=wordpress
+		volumes:
+			- "wordpress:/var/www/html"
+		restart: always
+		networks:
+			- blog
+		depends_on:
+			- mysql
+
+volumes:
+	mysql-data:
+	wordpress:
+
+networks:
+	blog:
+
+```
+
+> 其中，启动了两个容器，MySQL 和 wordpress 
+> wordpress 的depends_on 是指 wordpress 依赖 MySQL来运行
+> volumes 和 networks 表示指明了 MySQL 和 wordpress 的卷挂载和网络，后面不写则存储在 docker 的默认存放位置
+
+使用命令 `docker compose -f compose.yaml up -d` 来启动 dcoker 容器
+使用 `docker compose -f compose.yaml down` 关闭和删除容器，但是卷挂载和网络会保存
+
+要想删除卷挂载和网络等，使用 `docker compose -f compose.yaml -rmi -v` ,要注意 -rmi 后面可以加 all 即把所有（包括远程镜像、卷挂载、自定义网络）
+
+下次再次使用`docker compose -f compose.yaml up -d`命令，即可快速启动容器
+
+
+
 
 
