@@ -24,6 +24,45 @@ rose-shop
 	init.sql
 ```
 
+>> main.go 修改
+
+```
+// 修改数据库连接部分
+func initDB() (err error) {
+    // 从环境变量获取配置
+    dbUser := os.Getenv("DB_USER")
+    dbPass := os.Getenv("DB_PASSWORD")
+    dbHost := os.Getenv("DB_HOST")
+    dbPort := os.Getenv("DB_PORT")
+    dbName := os.Getenv("DB_NAME")
+    
+    dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
+        dbUser, dbPass, dbHost, dbPort, dbName)
+    // 其他代码保持不变...
+}
+```
+
+>> nginx.conf
+
+```
+server {
+    listen 80;
+    server_name localhost;
+    
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api {
+        proxy_pass http://backend:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
 >> Dockerfile
 
 ```
@@ -135,4 +174,14 @@ INSERT INTO `rose_prices` VALUES
 (6,'2025-05-06',50.00),
 (7,'2025-05-07',49.00);
 ```
+
+将 rose-shop 文件夹传入远程服务器，在远程服务器的 rose-shop 文件夹下，执行
+
+```
+docker-compose up -d --build
+```
+
+即可完成容器的部署
+
+
 ## Docker的镜像分离存储机制
