@@ -1,4 +1,29 @@
 
+## Dockerfile 参考
+
+[Dockerfile 编写指南](https://docs.docker.net.cn/reference/dockerfile/)
+
+![[Pasted image 20250513142810.png]]
+
+Dockerfile 相当于 windows 或 linux 的 iso 压缩包，里面封装好了系统环境，需要的软件以及一些启动命令，我们可以将自己的软件和一些启动命令封装进 Dockerfile
+
+一些重要参数
+
+```
+FROM 写一些基础环境，比如openjdk
+
+LABEL 可以写一些信息，如作者author
+
+COPY 把当前目录下的一些文件，复制到新镜像\操作系统（Dockerfile就认为是一个新的操作系统）的哪个目录下
+EXPOSE 开放的端口（容器内部的端口）
+
+ENTRYPOINT 容器固定启动命令，一般格式为["", "", ""]
+```
+
+使用 `docker build -f Dockerfile -t 起名 .` 来制作镜像
+
+> 其中，-f 指定哪个 Dockerfile 文件，-t 起新构建的镜像的名字，最后面还有一个 . ，这个 . 就是 ./ 代表在当前目录构建
+
 ## 使用docker制作自己的镜像
 
 > 案例：制作一个前后端分离页面并部署到 docker
@@ -140,6 +165,7 @@ services:
       - "8080:8080"
     networks:
       - rose-network
+    restart: always
     depends_on:
       mysql:
         condition: service_healthy
@@ -154,6 +180,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       - rose-network
+    restart: always
     depends_on:
       - backend
 
@@ -197,3 +224,14 @@ docker-compose up -d --build
 ```
 
 即可完成容器的部署
+
+---
+## Docker 镜像分层存储机制
+
+> 不同镜像共享基础层（如下图 debian 层，openjdk:17层），避免重复存储，
+
+![[Pasted image 20250513154514.png]]
+
+> 容器启动时，在镜像的只读层之上添加一个可写容器层。所有修改（如写入文件）均在此层进行，底层镜像保持不可变，确保一致性。
+
+![[Pasted image 20250513154544.png]]

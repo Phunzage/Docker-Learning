@@ -88,6 +88,7 @@ networks:
 > volumes 和 networks 表示指明了 MySQL 和 wordpress 的卷挂载和网络，后面不写则存储在 docker 的默认存放位置
 
 使用命令 `docker compose -f compose.yaml up -d` 来启动 dcoker 容器
+修改了 compose.yaml 文件之后可以再次使用`docker compose up -d`来批量启动容器
 使用 `docker compose -f compose.yaml down` 关闭和删除容器，但是卷挂载和网络会保存
 
 要想删除卷挂载和网络等，使用 `docker compose -f compose.yaml -rmi -v` ,要注意 -rmi 后面可以加 all 即把所有（包括远程镜像、卷挂载、自定义网络）
