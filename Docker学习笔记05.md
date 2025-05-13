@@ -1,9 +1,24 @@
 
 ## 使用docker制作自己的镜像
 
-> 案例：制作一个前后端分离页面
+> 案例：制作一个前后端分离页面并部署到 docker
 
 思路：
+
+- 服务隔离
+将应用拆分为 MySQL 、 Go 后端、 Nginx 三个独立容器，实现服务隔离
+MySQL：专注数据存储
+Go：处理业务逻辑和API
+Nginx：静态资源托管+API反向代理
+依赖启动顺序：MySQL -> Go 后端 -> Nginx
+
+- 网络通信设计
+自定义Docker网络（rose-network）：
+器间通过服务名（如 mysql 、 backend ）直接通信
+
+- 端口规划：
+仅暴露 Nginx 的80端口对外
+MySQL 3306端口不映射到宿主机，仅限容器间访问
 
 >> 文件结构
 
@@ -87,7 +102,7 @@ COPY --from=builder /app/main .
 CMD ["./main"]
 ```
 
->> compose.yml
+>> docker-compose.yml
 
 ```
 version: '3.8'
@@ -182,6 +197,3 @@ docker-compose up -d --build
 ```
 
 即可完成容器的部署
-
-
-## Docker的镜像分离存储机制
